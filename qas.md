@@ -231,7 +231,7 @@ public void waitAndPoll(){
 ## 11. How to use CI/CD in projects
 Using CI can help to increase speed of delivering products by automating routine steps such as running tests in different environments, building artifacts, storing artifacts in repos and deployment. It also may force to use better code standards.
 
-## 12 Functional vs OOP
+## 12. Functional vs OOP
 OOP Pros: It’s easy to understand the basic concept of objects and easy to interpret the meaning of method calls. OOP tends to use an imperative style rather than a declarative style, which reads like a straight-forward set of instructions for the computer to follow.
 
 OOP Cons: OOP Typically depends on shared state. Objects and behaviors are typically tacked together on the same entity, which may be accessed at random by any number of functions with non-deterministic order, which may lead to undesirable behavior such as race conditions.
@@ -248,12 +248,12 @@ More people are familiar with OO and imperative programming than functional prog
 
 FP has a much steeper learning curve than OOP because the broad popularity of OOP has allowed the language and learning materials of OOP to become more conversational, whereas the language of FP tends to be much more academic and formal. FP concepts are frequently written about using idioms and notations from lambda calculus, algebras, and category theory, all of which requires a prior knowledge foundation in those domains to be understood.
 
-## 13 JS diff between class inheritence and prototype inheritence
+## 13. JS diff between class inheritence and prototype inheritence
 Class Inheritance: instances inherit from classes (like a blueprint — a description of the class), and create sub-class relationships: hierarchical class taxonomies. Instances are typically instantiated via constructor functions with the new keyword. Class inheritance may or may not use the class keyword from ES6.
 
 Prototypal Inheritance: instances inherit directly from other objects. Instances are typically instantiated via factory functions or Object.create(). Instances may be composed from many different objects, allowing for easy selective inheritance.
 
-## 14 Monolith vs microserveses
+## 14. Monolith vs microserveses
 
 A monolithic architecture means that your app is written as one cohesive unit of code whose components are designed to work together, sharing the same memory space and resources.
 
@@ -280,14 +280,14 @@ Eventually, even monolthic architectures tend to route traffic through an outer 
 
 Microservices are frequently deployed on their own virtual machines or containers, causing a proliferation of VM wrangling work. These tasks are frequently automated with container fleet management tools.
 
-## 15 What is Monad in FP
+## 15. What is Monad in FP
 Let's be clear: A Monad is not a class or a trait; it is a concept.
 
 A Monad is an object that wraps another object in Scala. In Monads, the output of a calculation at any step is the input to other calculations, which run as a parent to the current step.
 Monads are containers. That means they contain some sort of elements. Instead of allowing us to operate on these elements directly, the container itself has certain properties. We can then work with the container and the container works with the element within. Composing functions is the reason why we want to use monads and should care about monads.
-## 16 What is deadlock
+## 16. What is deadlock
 A deadlock occurs when the waiting process is still holding on to another resource that the first needs before it can finish.
-## 17 Thread pools
+## 17. Thread pools
 When you use a thread pool, you write your concurrent code in the form of parallel tasks and submit them for execution to an instance of a thread pool.
 This instance controls several re-used threads for executing these tasks.
 ```java
@@ -407,7 +407,7 @@ SQL requires specialized DB hardware for better performance while NoSQL uses com
 - Wildcard String Searches - Indexes are present on searched columns. If not, can we use full-text indexes? If not, can we use hashes, n-grams, or some other solution?
 - A query hint is an explicit direction by us to the query optimizer. 
 
-## 23. Design patterns from GoF
+## 24. Design patterns from GoF
 ##### Builder
 Lets you construct complex objects step by step. The pattern allows you to produce different types and representations of an object using the same construction code.
 ```java
@@ -1167,7 +1167,7 @@ public class Demo {
 }
 ```
 
-## 24. ORM frameworks in Java, Hibernate
+## 25. ORM frameworks in Java, Hibernate
 Hibernate's primary feature is mapping from Java classes to database tables (and from Java data types to SQL data types). Hibernate also provides data query and retrieval facilities. It generates SQL calls and relieves the developer from manual result set handling and object conversion. Applications using Hibernate are portable to supported SQL databases with little performance overhead, There are two pieces of configuration required in any Hibernate application: one creates the database connections, and the other creates the object-to-table mapping. The Hibernate framework loads this file to create a SessionFactory, which is thread-safe global factory class for creating Sessionsproxy. The goal of the SessionFactory is to create Session objects. Session is a gateway to our database.  It is the Session’s job to take care of all database operations such as saving, loading, and retrieving records from relevant tables. The framework also maintains at transnational medium around our application. Hibernate mappings are loaded at startup and are cached in the SessionFactory. there are 3 states in Lifecyle in Hibernate. 
 - In the transient state, the object is not associated with a database table. That is, its state has not been saved to a table, and the object has no associated database identity (no primary key has been assigned). Objects in the transient state are non-transactional, meaning that they do not participate in the scope of any transaction bound to a Hibernate Session. After a successful invocation of the save or saveOrUpdate methods an object ceases to be transient and becomes persistent. The Session delete method (or a delete query) produces the inverse effect making a persistent object transient.
 
@@ -1175,7 +1175,7 @@ Hibernate's primary feature is mapping from Java classes to database tables (and
 
 - A persistent object that is no longer in the Session cache (associated with the Session) becomes a detached object. This happens after a transaction completes, when the Session is closed, cleared, or if the object is explicitly evicted from the Session cache. Given Hibernate transparency when it comes to providing persistent services to an object, objects in the detached state can effectively become intertier transfer objects and in certain application architectures can replace the need to have DTOs (Data Transfer Objects).
 
-## 25. JDBC
+## 26. JDBC
  It consists of a set of classes and interfaces written in the Java programming language. JDBC provides a standard API for tool/database developers and makes it possible to write database applications using a pure Java API. 
 - establish a connection with a database
 - send SQL statements
@@ -1192,18 +1192,18 @@ Connection con = DriverManager.getConnection (
       }
 ```
 
-## 26. Persistence layer: Patterns allow to organize Persistence
+## 27. Persistence layer: Patterns allow to organize Persistence
 - DAO is a class that usually has the CRUD operations like save, update, delete. DTO is just an object that holds data.
 - A Repository should only really concern itself with the persistence of Aggregates.
 - DTO - Data transfer object carries data between processes in order to reduce the number of method calls or if we talk about Domain-> UI: designed to hold the entire number of attributes that need to be displayed in a view.
 
 With these definitions, it’s clear that a Repository’s responsibility lies in persisting the state of Aggregates, not sharing the state of Aggregates with the Presentation Layer. It is in the DTO’s job description to be a carrier of Aggregate state to the Presentation Layer. Still, the DTO needs to be assembled somewhere. A dedicated DTO Assembler has the single responsibility of mapping (as in Mapper) the attributes from the Aggregate(s) to the DTO. A DTO Assembler can live in an Application Service that is a client of your Repository. The Application Service “will use Repositories to read the necessary Aggregate instances and then delegate to a DTO Assembler [Fowler, P of EAA] to map the attributes of the DTO.
-## 27. Memory optimization techniques in Java
+## 28. Memory optimization techniques in Java
 http://java-performance.info/overview-of-memory-saving-techniques-java/
 - Prefer primitive types to their Object wrappers. Wrappers take + 12bytes. Use library Trove
 - Try to minimize number of Objects you have. For example, prefer array-based structures like ArrayList/ArrayDeque to pointer based structures like LinkedList. 
 
-## 28. RDBMS indexes
+## 29. RDBMS indexes
 Primary Index is an ordered file which is fixed length size with two fields. Every table can have (but does not have to have) a primary key. The first field is the same a primary key and second, filed is pointed to that specific data block. It later devided into 2 types: dense, sparse.In a dense index, a record is created for every search key valued in the database.Sparse index - It is an index record that appears for only some of the values in the file, In this method of indexing technique, a range of index columns stores the same data block address, and when data needs to be retrieved, the block address will be fetched. 
 
 The secondary Index in DBMS can be generated by a field which has a unique value for each record, and it should be a candidate key. It is also known as a non-clustering index. 
@@ -1269,11 +1269,11 @@ Here, are cons/drawbacks of using non-clustered index:
     Lookup process on non-clustered index becomes costly.
     Every time the clustering key is updated, a corresponding update is required on the non-clustered index as it stores the clustering key.
     
-## 29. Joins, having distinct
+## 30. Joins, having distinct
 - Joins INNER, OUTER, CARTESIAN
 - HAVING is an aggregate func instead of where
 - DISTINCT - lifts all data and then creates set of unique vals
 
-## 30. Logging in multithreaded env
+## 31. Logging in multithreaded env
 There are two options: one is to write separate file for each thread or one for all. Logback MDC deals with it.
 The MDC class contains only static methods. It lets the developer place information in a diagnostic context that can be subsequently retrieved by certain logback components. The MDC manages contextual information on a per thread basis. Typically, while starting to service a new client request, the developer will insert pertinent contextual information, such as the client id, client's IP address, request parameters etc. into the MDC. Logback components, if appropriately configured, will automatically include this information in each log entry. 
