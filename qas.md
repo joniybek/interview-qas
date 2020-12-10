@@ -136,6 +136,7 @@ Some test methods include:
 - Auto testing - is testing UI with WebDriver/Appium, commonly PageObject is used here
 - Performance testing - using tools like Jmeter we can test perf.
 - System integration testing
+- Regression Testing
 
 ##### Given, When, Then
 - Given (Input): Test preparation like creating data or configure mocks
@@ -315,4 +316,397 @@ String greeting = Futures.allAsList(future1, future2).get()
 assertEquals("Hello World", greeting);
 ```
 
+## 18. RDBMS: how to prepare copy of table which is under high update/insert load?
+When working with batch data we need to load/export data into CSV files in tmp dir and then dowload
+
+## 19. RDBMS: Normalization forms
+- A primary is a single column value used to identify a database record uniquely. A primary key cannot be NULL and  must be unique.
+- A composite key is a primary key composed of multiple columns used to identify a record uniquely.
+-  Foreign Key references the primary key of another Table! It helps connect your Tables. It can be null and non unique. It ensures rows in one table have corresponding rows in another.
+-  A transitive functional dependency is when changing a non-key column, might cause any of the other non-key columns to change
+-  Indexing is a way to optimize the performance of a database by minimizing the number of disk accesses required when a query is processed. It is a data structure technique which is used to quickly locate and access the data in a database. In general, there are two types of file organization mechanism which are followed by the indexing methods to store the data:
+
+Database Normal Forms
+- 1NF (First Normal Form) Rules
+    Each table cell should contain a single value.
+    Each record needs to be unique.
+- 2NF (Second Normal Form) Rules
+    Rule 1- Be in 1NF
+    Rule 2- Single Column Primary Key
+- 3NF (Third Normal Form) Rules
+    Rule 1- Be in 2NF
+    Rule 2- Has no transitive functional dependencies
+-4NF (Fourth Normal Form) Rules
+If no database table instance contains two or more, independent and multivalued data describing the relevant entity, then it is in 4th Normal Form.
+- 5NF (Fifth Normal Form) Rules
+A table is in 5th Normal Form only if it is in 4NF and it cannot be decomposed into any number of smaller tables without loss of data.
+- 6NF (Sixth Normal Form)
+## 20. Transaction isolation levels
+- READ UNCOMMITTED - no locks, read everything
+    READ COMMITTED - with lock, default to many RDBMS, Suppose T2 reads some of the rows and T1 then change a row and commit the change, now T2 reads the same row set and gets a different result
+    REPEATABLE READ - his isolation level returns the same result set throughout the transaction execution for the same SELECT run any number of times during the progression of a transaction. REPEATABLE READ is MySQL’s default transaction isolation level.
+    SERIALIZABLE - completely isolates the effect of one transaction from others. It is similar to REPEATABLE READ with the additional restriction that row selected by one transaction cannot be changed by another until the first transaction finishes.
+## 21. Compare SQL and NoSQL 
+SQL databases are table based databases whereas NoSQL databases can be document based, key-value pairs, graph databases.
+SQL databases are vertically scalable while NoSQL databases are horizontally scalable.
+SQL databases have a predefined schema whereas NoSQL databases use dynamic schema for unstructured data.
+SQL requires specialized DB hardware for better performance while NoSQL uses commodity hardware.
+
+
+|         Parameter         |                                                                 SQL                                                                 |                                                                                               NOSQL                                                                                               |   |   |
+|:-------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|---|---|
+| Definition                | SQL   databases are primarily called RDBMS or Relational Databases                                                                  | NoSQL   databases are primarily called as Non-relational or distributed database                                                                                                                  |   |   |
+| Design for                | Traditional   RDBMS uses SQL syntax and queries to analyze and get the data for further   insights. They are used for OLAP systems. | NoSQL   database system consists of various kind of database technologies. These   databases were developed in response to the demands presented for the   development of the modern application. |   |   |
+| Query Language            | Structured   query language (SQL)                                                                                                   | No   declarative query language                                                                                                                                                                   |   |   |
+| Type                      | SQL   databases are table based databases                                                                                           | NoSQL   databases can be document based, key-value pairs, graph databases                                                                                                                         |   |   |
+| Schema                    | SQL   databases have a predefined schema                                                                                            | NoSQL   databases use dynamic schema for unstructured data.                                                                                                                                       |   |   |
+| Ability to scale          | SQL   databases are vertically scalable                                                                                             | NoSQL   databases are horizontally scalable                                                                                                                                                       |   |   |
+| Examples                  | Oracle,   Postgres, and MS-SQL.                                                                                                     | MongoDB,   Redis, , Neo4j, Cassandra, Hbase.                                                                                                                                                      |   |   |
+| Best suited for           | An   ideal choice for the complex query intensive environment.                                                                      | It   is not good fit complex queries.                                                                                                                                                             |   |   |
+| Hierarchical data storage | SQL   databases are not suitable for hierarchical data storage.                                                                     | More   suitable for the hierarchical data store as it supports key-value pair   method.                                                                                                           |   |   |
+| Variations                | One   type with minor variations.                                                                                                   | Many   different types which include key-value stores, document databases, and graph   databases.                                                                                                 |   |   |
+| Development Year          | It   was developed in the 1970s to deal with issues with flat file storage                                                          | Developed   in the late 2000s to overcome issues and limitations of SQL databases.                                                                                                                |   |   |
+| Open-source               | A   mix of open-source like Postgres & MySQL, and commercial like Oracle   Database.                                                | Open-source                                                                                                                                                                                       |   |   |
+| Consistency               | It   should be configured for strong consistency.                                                                                   | It   depends on DBMS as some offers strong consistency like MongoDB, whereas   others offer only offers eventual consistency, like Cassandra.                                                     |   |   |
+| Best Used for             | RDBMS   database is the right option for solving ACID problems.                                                                     | NoSQL   is a best used for solving data availability problems                                                                                                                                     |   |   |
+| Importance                | It   should be used when data validity is super important                                                                           | Use   when it's more important to have fast data than correct data                                                                                                                                |   |   |
+| Best option               | When   you need to support dynamic queries                                                                                          | Use   when you need to scale based on changing requirements                                                                                                                                       |   |   |
+| Hardware                  | Specialized   DB hardware (Oracle Exadata, etc.)                                                                                    | Commodity   hardware                                                                                                                                                                              |   |   |
+| Network                   | Highly   available network (Infiniband, Fabric Path, etc.)                                                                          | Commodity   network (Ethernet, etc.)                                                                                                                                                              |   |   |
+| Storage Type              | Highly   Available Storage (SAN, RAID, etc.)                                                                                        | Commodity   drives storage (standard HDDs, JBOD)                                                                                                                                                  |   |   |
+| Best features             | Cross-platform   support, Secure and free                                                                                           | Easy   to use, High performance, and Flexible tool.                                                                                                                                               |   |   |
+| Top Companies Using       | Hootsuite,   CircleCI, Gauges                                                                                                       | Airbnb,   Uber, Kickstarter                                                                                                                                                                       |   |   |
+| Average salary            | The   average salary for any professional SQL Developer is $84,328 per year in the   U.S.A.                                         | The   average salary for "NoSQL developer" ranges from approximately   $72,174 per year                                                                                                           |   |   |
+| ACID vs. BASE Model       | ACID(   Atomicity, Consistency, Isolation, and Durability) is a standard for RDBMS                                                  | Base   ( Basically Available, Soft state, Eventually Consistent) is a model of many   NoSQL systems                                                                                               |   |   |
+
+
+## 22. Stored procedure, pros vs cons
+##### Advantages :
+- Better Performance – The procedure calls are quick and efficient as stored procedures are compiled once and stored in executable form.Hence the response is quick. The executable code is automatically cached, hence lowers the memory requirements.
+- Higher Productivity – Since the same piece of code is used again and again so, it results in higher productivity.
+- Ease of Use – To create a stored procedure, one can use any Java Integrated Development Environment (IDE). Then, they can be deployed on any tier of network architecture.
+- Scalability – Stored procedures increase scalability by isolating application processing on the server.
+- Maintainability – Maintaining a procedure on a server is much easier then maintaining copies on various client machines, this is because scripts are in one location.
+- Security – Access to the Oracle data can be restricted by allowing users to manipulate the data only through stored procedures that execute with their definer’s privileges.
+
+##### Disadvantages :
+- Testing – Testing of a logic which is encapsulated inside a stored procedure is very difficult. Any data errors in handling stored procedures are not generated until runtime.
+- Debugging – Depending on the database technology, debugging stored procedures will either be very difficult or not possible at all. Some relational databases such as SQL Server have some debugging capabilities.
+- Versioning – Version control is not supported by the stored procedure.
+- Cost – An extra developer in the form of DBA is required to access the SQL and write a better stored procedure. This will automatically incur added cost.
+- Portability – Complex stored procedures will not always port to upgraded versions of the same database. This is specially true in case of moving from one database type(Oracle) to another database type(MS SQL Server)
+    
+## 23. How to profile slow queries and how to optimize
+- Most SQL databases provide a Slow Query Log, a log where the database server registers all queries that exceed a given threshold of execution time. 
+- Middleware and Application Logs - Write in directly code how much time took to execute query
+- APM and Distributed Tracing - The way most APMs work is through a library or agent that is installed alongside your application and automatically instruments its client libraries, like http, grpc, sql, etc. to monitor and log transactions and queries.
+
+##### To optimize
+- SQL Server can efficiently filter a data set using indexes via the WHERE clause or any combination of filters that are separated by an AND operator. 
+- OR is a different story. Because it is inclusive, SQL Server cannot process it in a single operation. Instead, each component of the OR must be evaluated independently. 
+- Wildcard String Searches - Indexes are present on searched columns. If not, can we use full-text indexes? If not, can we use hashes, n-grams, or some other solution?
+- A query hint is an explicit direction by us to the query optimizer. 
+
+## 23. Design patterns from GoF
+##### Builder
+Lets you construct complex objects step by step. The pattern allows you to produce different types and representations of an object using the same construction code.
+```java
+public final class Hero {
+  private final Profession profession;
+  private final String name;
+  private final HairType hairType;
+  private final HairColor hairColor;
+  private final Armor armor;
+  private final Weapon weapon;
+
+  private Hero(Builder builder) {
+    this.profession = builder.profession;
+    this.name = builder.name;
+    this.hairColor = builder.hairColor;
+    this.hairType = builder.hairType;
+    this.weapon = builder.weapon;
+    this.armor = builder.armor;
+  }
+}
+  public static class Builder {
+    private final Profession profession;
+    private final String name;
+    private HairType hairType;
+    private HairColor hairColor;
+    private Armor armor;
+    private Weapon weapon;
+
+    public Builder(Profession profession, String name) {
+      if (profession == null || name == null) {
+        throw new IllegalArgumentException("profession and name can not be null");
+      }
+      this.profession = profession;
+      this.name = name;
+    }
+
+    public Builder withHairType(HairType hairType) {
+      this.hairType = hairType;
+      return this;
+    }
+
+    public Builder withHairColor(HairColor hairColor) {
+      this.hairColor = hairColor;
+      return this;
+    }
+
+    public Hero build() {
+      return new Hero(this);
+    }
+  }
+  ```
+##### Abstract Factory
+is a creational design pattern that lets you produce families of related objects without specifying their concrete classes.
+```java
+public interface KingdomFactory {
+  Castle createCastle();
+  King createKing();
+  Army createArmy();
+}
+
+public class ElfKingdomFactory implements KingdomFactory {
+  public Castle createCastle() {
+    return new ElfCastle();
+  }
+  public King createKing() {
+    return new ElfKing();
+  }
+  public Army createArmy() {
+    return new ElfArmy();
+  }
+}
+
+public class OrcKingdomFactory implements KingdomFactory {
+  public Castle createCastle() {
+    return new OrcCastle();
+  }
+  public King createKing() {
+    return new OrcKing();
+  }
+  public Army createArmy() {
+    return new OrcArmy();
+  }
+}
+```
+##### Factory methods
+is a creational design pattern that provides an interface for creating objects in a superclass, but allows subclasses to alter the type of objects that will be created.
+```java
+/**
+ * Base factory class. Note that "factory" is merely a role for the class. It
+ * should have some core business logic which needs different products to be
+ * created.
+ */
+public abstract class Dialog {
+
+    public void renderWindow() {
+        // ... other code ...
+
+        Button okButton = createButton();
+        okButton.render();
+    }
+
+    /**
+     * Subclasses will override this method in order to create specific button
+     * objects.
+     */
+    public abstract Button createButton();
+}
+
+public class Demo {
+    private static Dialog dialog;
+
+    public static void main(String[] args) {
+        configure();
+        runBusinessLogic();
+    }
+
+    /**
+     * The concrete factory is usually chosen depending on configuration or
+     * environment options.
+     */
+    static void configure() {
+        if (System.getProperty("os.name").equals("Windows 10")) {
+            dialog = new WindowsDialog();
+        } else {
+            dialog = new HtmlDialog();
+        }
+    }
+```
+##### Adapter
+Allows objects with incompatible interfaces to collaborate.
+```java,
+
+/**
+ * RoundHoles are compatible with RoundPegs.
+ */
+public class RoundHole {
+    private double radius;
+
+    public RoundHole(double radius) {
+        this.radius = radius;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public boolean fits(RoundPeg peg) {
+        boolean result;
+        result = (this.getRadius() >= peg.getRadius());
+        return result;
+    }
+}
+
+/**
+ * RoundPegs are compatible with RoundHoles.
+ */
+public class RoundPeg {
+    private double radius;
+
+    public RoundPeg() {}
+
+    public RoundPeg(double radius) {
+        this.radius = radius;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+}
+
+/**
+ * SquarePegs are not compatible with RoundHoles (they were implemented by
+ * previous development team). But we have to integrate them into our program.
+ */
+public class SquarePeg {
+    private double width;
+
+    public SquarePeg(double width) {
+        this.width = width;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getSquare() {
+        double result;
+        result = Math.pow(this.width, 2);
+        return result;
+    }
+}
+
+/**
+ * Adapter allows fitting square pegs into round holes.
+ */
+public class SquarePegAdapter extends RoundPeg {
+    private SquarePeg peg;
+
+    public SquarePegAdapter(SquarePeg peg) {
+        this.peg = peg;
+    }
+
+    @Override
+    public double getRadius() {
+        double result;
+        // Calculate a minimum circle radius, which can fit this peg.
+        result = (Math.sqrt(Math.pow((peg.getWidth() / 2), 2) * 2));
+        return result;
+    }
+}
+
+/**
+ * Somewhere in client code...
+ */
+public class Demo {
+    public static void main(String[] args) {
+        // Round fits round, no surprise.
+        RoundHole hole = new RoundHole(5);
+
+        SquarePeg smallSqPeg = new SquarePeg(2);
+        SquarePeg largeSqPeg = new SquarePeg(20);
+        // hole.fits(smallSqPeg); // Won't compile.
+
+        // Adapter solves the problem.
+        SquarePegAdapter smallSqPegAdapter = new SquarePegAdapter(smallSqPeg);
+        SquarePegAdapter largeSqPegAdapter = new SquarePegAdapter(largeSqPeg);
+        if (hole.fits(smallSqPegAdapter)) {
+            System.out.println("Square peg w2 fits round hole r5.");
+        }
+        if (!hole.fits(largeSqPegAdapter)) {
+            System.out.println("Square peg w20 does not fit into round hole r5.");
+        }
+    }
+}
+```
+##### Decorator
+Lets you attach new behaviors to objects by placing these objects inside special wrapper objects that contain the behaviors.
+```java
+public interface Troll {
+  void attack();
+  int getAttackPower();
+  void fleeBattle();
+}
+
+public class SimpleTroll implements Troll {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleTroll.class);
+
+  @Override
+  public void attack() {
+    LOGGER.info("The troll tries to grab you!");
+  }
+
+  @Override
+  public int getAttackPower() {
+    return 10;
+  }
+
+  @Override
+  public void fleeBattle() {
+    LOGGER.info("The troll shrieks in horror and runs away!");
+  }
+}
+
+public class ClubbedTroll implements Troll {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ClubbedTroll.class);
+
+  private final Troll decorated;
+
+  public ClubbedTroll(Troll decorated) {
+    this.decorated = decorated;
+  }
+
+  @Override
+  public void attack() {
+    decorated.attack();
+    LOGGER.info("The troll swings at you with a club!");
+  }
+
+  @Override
+  public int getAttackPower() {
+    return decorated.getAttackPower() + 10;
+  }
+
+  @Override
+  public void fleeBattle() {
+    decorated.fleeBattle();
+  }
+}
+
+// simple troll
+var troll = new SimpleTroll();
+troll.attack(); // The troll tries to grab you!
+troll.fleeBattle(); // The troll shrieks in horror and runs away!
+
+// change the behavior of the simple troll by adding a decorator
+var clubbedTroll = new ClubbedTroll(troll);
+clubbedTroll.attack(); // The troll tries to grab you! The troll swings at you with a club!
+clubbedTroll.fleeBattle(); 
+```
 
