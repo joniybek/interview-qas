@@ -709,4 +709,571 @@ var clubbedTroll = new ClubbedTroll(troll);
 clubbedTroll.attack(); // The troll tries to grab you! The troll swings at you with a club!
 clubbedTroll.fleeBattle(); 
 ```
+##### Facade
+Provides a simplified interface to a library, a framework, or any other complex set of classes.
+```java
+public class VideoConversionFacade {
+    public File convertVideo(String fileName, String format) {
+        System.out.println("VideoConversionFacade: conversion started.");
+        VideoFile file = new VideoFile(fileName);
+        Codec sourceCodec = CodecFactory.extract(file);
+        Codec destinationCodec;
+        if (format.equals("mp4")) {
+            destinationCodec = new OggCompressionCodec();
+        } else {
+            destinationCodec = new MPEG4CompressionCodec();
+        }
+        VideoFile buffer = BitrateReader.read(file, sourceCodec);
+        VideoFile intermediateResult = BitrateReader.convert(buffer, destinationCodec);
+        File result = (new AudioMixer()).fix(intermediateResult);
+        System.out.println("VideoConversionFacade: conversion completed.");
+        return result;
+    }
+}
+```
+##### Proxy
+is a structural design pattern that provides an object that acts as a substitute for a real service object used by a client. A proxy receives client requests, does some work (access control, caching, etc.) and then passes the request to a service object.
+```java
+public interface ThirdPartyYouTubeLib {
+    HashMap<String, Video> popularVideos();
 
+    Video getVideo(String videoId);
+}
+
+public class YouTubeCacheProxy implements ThirdPartyYouTubeLib {
+    private ThirdPartyYouTubeLib youtubeService;
+    private HashMap<String, Video> cachePopular = new HashMap<String, Video>();
+    private HashMap<String, Video> cacheAll = new HashMap<String, Video>();
+
+    public YouTubeCacheProxy() {
+        this.youtubeService = new ThirdPartyYouTubeClass();
+    }
+
+    @Override
+    public HashMap<String, Video> popularVideos() {
+        if (cachePopular.isEmpty()) {
+            cachePopular = youtubeService.popularVideos();
+        } else {
+            System.out.println("Retrieved list from cache.");
+        }
+        return cachePopular;
+    }
+
+    @Override
+    public Video getVideo(String videoId) {
+        Video video = cacheAll.get(videoId);
+        if (video == null) {
+            video = youtubeService.getVideo(videoId);
+            cacheAll.put(videoId, video);
+        } else {
+            System.out.println("Retrieved video '" + videoId + "' from cache.");
+        }
+        return video;
+    }
+
+    public void reset() {
+        cachePopular.clear();
+        cacheAll.clear();
+    }
+}
+```
+
+##### Observer
+Lets you define a subscription mechanism to notify multiple objects about any events that happen to the object they're observing.
+```java
+public class EventManager {
+    Map<String, List<EventListener>> listeners = new HashMap<>();
+
+    public EventManager(String... operations) {
+        for (String operation : operations) {
+            this.listeners.put(operation, new ArrayList<>());
+        }
+    }
+
+    public void subscribe(String eventType, EventListener listener) {
+        List<EventListener> users = listeners.get(eventType);
+        users.add(listener);
+    }
+
+    public void unsubscribe(String eventType, EventListener listener) {
+        List<EventListener> users = listeners.get(eventType);
+        users.remove(listener);
+    }
+
+    public void notify(String eventType, File file) {
+        List<EventListener> users = listeners.get(eventType);
+        for (EventListener listener : users) {
+            listener.update(eventType, file);
+        }
+    }
+}
+
+
+public class Editor {
+    public EventManager events;
+    private File file;
+
+    public Editor() {
+        this.events = new EventManager("open", "save");
+    }
+
+    public void openFile(String filePath) {
+        this.file = new File(filePath);
+        events.notify("open", file);
+    }
+
+    public void saveFile() throws Exception {
+        if (this.file != null) {
+            events.notify("save", file);
+        } else {
+            throw new Exception("Please open a file first.");
+        }
+    }
+}
+
+public interface EventListener {
+    void update(String eventType, File file);
+}
+
+public class EmailNotificationListener implements EventListener {
+    private String email;
+
+    public EmailNotificationListener(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public void update(String eventType, File file) {
+        System.out.println("Email to " + email + ": Someone has performed " + eventType + " operation with the following file: " + file.getName());
+    }
+}
+
+public class Demo {
+    public static void main(String[] args) {
+        Editor editor = new Editor();
+        editor.events.subscribe("open", new LogOpenListener("/path/to/log/file.txt"));
+        editor.events.subscribe("save", new EmailNotificationListener("admin@example.com"));
+
+        try {
+            editor.openFile("test.txt");
+            editor.saveFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+##### Strategy
+The Strategy pattern is very common in Java code. It’s often used in various frameworks to provide users a way to change the behavior of a class without extending it.
+```java
+
+/**
+ * Common interface for all strategies.
+ */
+public interface PayStrategy {
+    boolean pay(int paymentAmount);
+    void collectPaymentDetails();
+}
+
+
+/**
+ * Concrete strategy. Implements credit card payment method.
+ */
+public class PayByCreditCard implements PayStrategy {
+    private final BufferedReader READER = new BufferedReader(new InputStreamReader(System.in));
+    private CreditCard card;
+
+    /**
+     * Collect credit card data.
+     */
+    @Override
+    public void collectPaymentDetails() {
+        try {
+            System.out.print("Enter the card number: ");
+            String number = READER.readLine();
+            System.out.print("Enter the card expiration date 'mm/yy': ");
+            String date = READER.readLine();
+            System.out.print("Enter the CVV code: ");
+            String cvv = READER.readLine();
+            card = new CreditCard(number, date, cvv);
+
+            // Validate credit card number...
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * After card validation we can charge customer's credit card.
+     */
+    @Override
+    public boolean pay(int paymentAmount) {
+        if (cardIsPresent()) {
+            System.out.println("Paying " + paymentAmount + " using Credit Card.");
+            card.setAmount(card.getAmount() - paymentAmount);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean cardIsPresent() {
+        return card != null;
+    }
+}
+
+/**
+ * Order class. Doesn't know the concrete payment method (strategy) user has
+ * picked. It uses common strategy interface to delegate collecting payment data
+ * to strategy object. It can be used to save order to database.
+ */
+public class Order {
+    private int totalCost = 0;
+    private boolean isClosed = false;
+
+    public void processOrder(PayStrategy strategy) {
+        strategy.collectPaymentDetails();
+        // Here we could collect and store payment data from the strategy.
+    }
+
+    public void setTotalCost(int cost) {
+        this.totalCost += cost;
+    }
+
+    public int getTotalCost() {
+        return totalCost;
+    }
+
+    public boolean isClosed() {
+        return isClosed;
+    }
+
+    public void setClosed() {
+        isClosed = true;
+    }
+}
+
+
+/**
+ * World first console e-commerce application.
+ */
+public class Demo {
+    private static Map<Integer, Integer> priceOnProducts = new HashMap<>();
+    private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private static Order order = new Order();
+    private static PayStrategy strategy;
+
+    static {
+        priceOnProducts.put(1, 2200);
+        priceOnProducts.put(2, 1850);
+        priceOnProducts.put(3, 1100);
+        priceOnProducts.put(4, 890);
+    }
+
+    public static void main(String[] args) throws IOException {
+        while (!order.isClosed()) {
+            int cost;
+
+            String continueChoice;
+            do {
+                System.out.print("Please, select a product:" + "\n" +
+                        "1 - Mother board" + "\n" +
+                        "2 - CPU" + "\n" +
+                        "3 - HDD" + "\n" +
+                        "4 - Memory" + "\n");
+                int choice = Integer.parseInt(reader.readLine());
+                cost = priceOnProducts.get(choice);
+                System.out.print("Count: ");
+                int count = Integer.parseInt(reader.readLine());
+                order.setTotalCost(cost * count);
+                System.out.print("Do you wish to continue selecting products? Y/N: ");
+                continueChoice = reader.readLine();
+            } while (continueChoice.equalsIgnoreCase("Y"));
+
+            if (strategy == null) {
+                System.out.println("Please, select a payment method:" + "\n" +
+                        "1 - PalPay" + "\n" +
+                        "2 - Credit Card");
+                String paymentMethod = reader.readLine();
+
+                // Client creates different strategies based on input from user,
+                // application configuration, etc.
+                if (paymentMethod.equals("1")) {
+                    strategy = new PayByPayPal();
+                } else {
+                    strategy = new PayByCreditCard();
+                }
+            }
+
+            // Order object delegates gathering payment data to strategy object,
+            // since only strategies know what data they need to process a
+            // payment.
+            order.processOrder(strategy);
+
+            System.out.print("Pay " + order.getTotalCost() + " units or Continue shopping? P/C: ");
+            String proceed = reader.readLine();
+            if (proceed.equalsIgnoreCase("P")) {
+                // Finally, strategy handles the payment.
+                if (strategy.pay(order.getTotalCost())) {
+                    System.out.println("Payment has been successful.");
+                } else {
+                    System.out.println("FAIL! Please, check your data.");
+                }
+                order.setClosed();
+            }
+        }
+    }
+}
+```
+
+##### Chain of responsibility
+Lets you pass requests along a chain of handlers. Upon receiving a request, each handler decides either to process the request or to pass it to the next handler in the chain.
+
+```java
+/**
+ * Base middleware class.
+ */
+public abstract class Middleware {
+    private Middleware next;
+
+    /**
+     * Builds chains of middleware objects.
+     */
+    public Middleware linkWith(Middleware next) {
+        this.next = next;
+        return next;
+    }
+
+    /**
+     * Subclasses will implement this method with concrete checks.
+     */
+    public abstract boolean check(String email, String password);
+
+    /**
+     * Runs check on the next object in chain or ends traversing if we're in
+     * last object in chain.
+     */
+    protected boolean checkNext(String email, String password) {
+        if (next == null) {
+            return true;
+        }
+        return next.check(email, password);
+    }
+}
+
+/**
+ * ConcreteHandler. Checks whether a user with the given credentials exists.
+ */
+public class UserExistsMiddleware extends Middleware {
+    private Server server;
+
+    public UserExistsMiddleware(Server server) {
+        this.server = server;
+    }
+
+    public boolean check(String email, String password) {
+        if (!server.hasEmail(email)) {
+            System.out.println("This email is not registered!");
+            return false;
+        }
+        if (!server.isValidPassword(email, password)) {
+            System.out.println("Wrong password!");
+            return false;
+        }
+        return checkNext(email, password);
+    }
+}
+
+/**
+ * ConcreteHandler. Checks a user's role.
+ */
+public class RoleCheckMiddleware extends Middleware {
+    public boolean check(String email, String password) {
+        if (email.equals("admin@example.com")) {
+            System.out.println("Hello, admin!");
+            return true;
+        }
+        System.out.println("Hello, user!");
+        return checkNext(email, password);
+    }
+}
+
+/**
+ * Server class.
+ */
+public class Server {
+    private Map<String, String> users = new HashMap<>();
+    private Middleware middleware;
+
+    /**
+     * Client passes a chain of object to server. This improves flexibility and
+     * makes testing the server class easier.
+     */
+    public void setMiddleware(Middleware middleware) {
+        this.middleware = middleware;
+    }
+
+    /**
+     * Server gets email and password from client and sends the authorization
+     * request to the chain.
+     */
+    public boolean logIn(String email, String password) {
+        if (middleware.check(email, password)) {
+            System.out.println("Authorization have been successful!");
+
+            // Do something useful here for authorized users.
+
+            return true;
+        }
+        return false;
+    }
+}
+
+/**
+ * Demo class. Everything comes together here.
+ */
+public class Demo {
+    private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private static Server server;
+
+    private static void init() {
+        server = new Server();
+        server.register("admin@example.com", "admin_pass");
+        server.register("user@example.com", "user_pass");
+
+        // All checks are linked. Client can build various chains using the same
+        // components.
+        Middleware middleware = new ThrottlingMiddleware(2);
+        middleware.linkWith(new UserExistsMiddleware(server))
+                .linkWith(new RoleCheckMiddleware());
+
+        // Server gets a chain from client code.
+        server.setMiddleware(middleware);
+    }
+
+    public static void main(String[] args) throws IOException {
+        init();
+
+        boolean success;
+        do {
+            System.out.print("Enter email: ");
+            String email = reader.readLine();
+            System.out.print("Input password: ");
+            String password = reader.readLine();
+            success = server.logIn(email, password);
+        } while (!success);
+    }
+}
+```
+
+## 24. ORM frameworks in Java, Hibernate
+Hibernate's primary feature is mapping from Java classes to database tables (and from Java data types to SQL data types). Hibernate also provides data query and retrieval facilities. It generates SQL calls and relieves the developer from manual result set handling and object conversion. Applications using Hibernate are portable to supported SQL databases with little performance overhead, There are two pieces of configuration required in any Hibernate application: one creates the database connections, and the other creates the object-to-table mapping. The Hibernate framework loads this file to create a SessionFactory, which is thread-safe global factory class for creating Sessionsproxy. The goal of the SessionFactory is to create Session objects. Session is a gateway to our database.  It is the Session’s job to take care of all database operations such as saving, loading, and retrieving records from relevant tables. The framework also maintains at transnational medium around our application. Hibernate mappings are loaded at startup and are cached in the SessionFactory. there are 3 states in Lifecyle in Hibernate. 
+- In the transient state, the object is not associated with a database table. That is, its state has not been saved to a table, and the object has no associated database identity (no primary key has been assigned). Objects in the transient state are non-transactional, meaning that they do not participate in the scope of any transaction bound to a Hibernate Session. After a successful invocation of the save or saveOrUpdate methods an object ceases to be transient and becomes persistent. The Session delete method (or a delete query) produces the inverse effect making a persistent object transient.
+
+- Persistent objects are objects with database identity. (If they have been assigned a primary key but have not yet been saved to the database, they are referred to as being in the “new” state). Persistent objects are transactional, which means that they participate in transactions associated with the Session (at the end of the transaction the object state will be synchronized with the database).
+
+- A persistent object that is no longer in the Session cache (associated with the Session) becomes a detached object. This happens after a transaction completes, when the Session is closed, cleared, or if the object is explicitly evicted from the Session cache. Given Hibernate transparency when it comes to providing persistent services to an object, objects in the detached state can effectively become intertier transfer objects and in certain application architectures can replace the need to have DTOs (Data Transfer Objects).
+
+## 25. JDBC
+ It consists of a set of classes and interfaces written in the Java programming language. JDBC provides a standard API for tool/database developers and makes it possible to write database applications using a pure Java API. 
+- establish a connection with a database
+- send SQL statements
+- process the results. 
+```java
+Connection con = DriverManager.getConnection (
+                "jdbc:odbc:wombat", "login", "password");
+    Statement stmt = con.createStatement();
+    ResultSet rs = stmt.executeQuery("SELECT a, b, c FROM Table1");
+    while (rs.next()) {
+      int x = getInt("a");
+      String s = getString("b");
+      float f = getFloat("c");
+      }
+```
+
+## 26. Persistence layer: Patterns allow to organize Persistence
+- DAO is a class that usually has the CRUD operations like save, update, delete. DTO is just an object that holds data.
+- A Repository should only really concern itself with the persistence of Aggregates.
+- DTO - Data transfer object carries data between processes in order to reduce the number of method calls or if we talk about Domain-> UI: designed to hold the entire number of attributes that need to be displayed in a view.
+
+With these definitions, it’s clear that a Repository’s responsibility lies in persisting the state of Aggregates, not sharing the state of Aggregates with the Presentation Layer. It is in the DTO’s job description to be a carrier of Aggregate state to the Presentation Layer. Still, the DTO needs to be assembled somewhere. A dedicated DTO Assembler has the single responsibility of mapping (as in Mapper) the attributes from the Aggregate(s) to the DTO. A DTO Assembler can live in an Application Service that is a client of your Repository. The Application Service “will use Repositories to read the necessary Aggregate instances and then delegate to a DTO Assembler [Fowler, P of EAA] to map the attributes of the DTO.
+## 27. Memory optimization techniques in Java
+http://java-performance.info/overview-of-memory-saving-techniques-java/
+- Prefer primitive types to their Object wrappers. Wrappers take + 12bytes. Use library Trove
+- Try to minimize number of Objects you have. For example, prefer array-based structures like ArrayList/ArrayDeque to pointer based structures like LinkedList. 
+
+## 28. RDBMS indexes
+Primary Index is an ordered file which is fixed length size with two fields. Every table can have (but does not have to have) a primary key. The first field is the same a primary key and second, filed is pointed to that specific data block. It later devided into 2 types: dense, sparse.In a dense index, a record is created for every search key valued in the database.Sparse index - It is an index record that appears for only some of the values in the file, In this method of indexing technique, a range of index columns stores the same data block address, and when data needs to be retrieved, the block address will be fetched. 
+
+The secondary Index in DBMS can be generated by a field which has a unique value for each record, and it should be a candidate key. It is also known as a non-clustering index. 
+
+In a clustered index, records themselves are stored in the Index and not pointers. Cluster index offers faster data accessing. Cluster index doesn’t require additional disk space. Clustered index stores data pages in the leaf nodes of the index. Sometimes the Index is created on non-primary key columns which might not be unique for each record. In such a situation, you can group two or more columns to get the unique values and create an index which is called clustered Index. This also helps you to identify the record faster.
+
+Multilevel Indexing in Database is created when a primary index does not fit in memory. In this type of indexing method, you can reduce the number of disk accesses to short any record and kept on a disk as a sequential file and create a sparse base on that file. 
+
+B-tree index is the widely used data structures for tree based indexing in DBMS. It is a multilevel format of tree based indexing in DBMS technique which has balanced binary search trees. All leaf nodes of the B tree signify actual data pointers. 
+Characteristic of Clustered Index
+
+    Default and sorted data storage
+    Use just one or more than one columns for an index
+    Helps you to store Data and index together
+    Fragmentation
+    Operations
+    Clustered index scan and index seek
+    Key Lookup
+
+Characteristics of Non-clustered Indexes
+
+    Store key values only
+    Pointers to Heap/Clustered Index rows
+    Allows Secondary data access
+    Bridge to the data
+    Operations of Index Scan and Index Seek
+    You can create a nonclustered index for a table or view
+    Every index row in the nonclustered index stores the nonclustered key value and a row locator
+    
+Advantages of Clustered Index
+
+The pros/benefits of the clustered index are:
+
+    Clustered indexes are an ideal option for range or group by with max, min, count type queries
+    In this type of index, a search can go straight to a specific point in data so that you can keep reading sequentially from there.
+    Clustered index method uses location mechanism to locate index entry at the start of a range.
+    It is an effective method for range searches when a range of search key values is requested.
+    Helps you to minimize page transfers and maximize the cache hits. 
+    
+    Disadvantages of Clustered Index
+
+Here, are cons/drawbacks of using clustered index:
+
+    Lots of inserts in non-sequential order
+    A clustered index creates lots of constant page splits, which includes data page as well as index pages.
+    Extra work for SQL for inserts, updates, and deletes.
+    A clustered index takes longer time to update records when the fields in the clustered index are changed.
+    The leaf nodes mostly contain data pages in the clustered index.
+    
+    Advantages of Non-clustered index
+
+Pros of using non-clustered index are:
+
+    A non-clustering index helps you to retrieves data quickly from the database table.
+    Helps you to avoid the overhead cost associated with the clustered index
+    A table may have multiple non-clustered indexes in RDBMS. So, it can be used to create more than one index. 
+    
+Disadvantages of Non-clustered index
+
+Here, are cons/drawbacks of using non-clustered index:
+
+    A non-clustered index helps you to stores data in a logical order but does not allow to sort data rows physically.
+    Lookup process on non-clustered index becomes costly.
+    Every time the clustering key is updated, a corresponding update is required on the non-clustered index as it stores the clustering key.
+    
+## 29. Joins, having distinct
+- Joins INNER, OUTER, CARTESIAN
+- HAVING is an aggregate func instead of where
+- DISTINCT - lifts all data and then creates set of unique vals
+
+## 30. Logging in multithreaded env
+There are two options: one is to write separate file for each thread or one for all. Logback MDC deals with it.
+The MDC class contains only static methods. It lets the developer place information in a diagnostic context that can be subsequently retrieved by certain logback components. The MDC manages contextual information on a per thread basis. Typically, while starting to service a new client request, the developer will insert pertinent contextual information, such as the client id, client's IP address, request parameters etc. into the MDC. Logback components, if appropriately configured, will automatically include this information in each log entry. 
