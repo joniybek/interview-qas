@@ -10,7 +10,7 @@ Inheritance is a mechanism in which one object acquires all the states and behav
 Is process of hiding implementation details and showing functionality.
 
 ##### Polimorhphism
-Is ability of class to take many forms. Overriding and overloading.
+Is ability of class to take many forms. Overriding(Runtime) and overloading(Compiletime).
 
 ##### Encapsulation
 Encapsulation is a process of wrapping code and data together into a single unit.
