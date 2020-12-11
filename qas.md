@@ -326,6 +326,7 @@ When working with batch data we need to load/export data into CSV files in tmp d
 -  A transitive functional dependency is when changing a non-key column, might cause any of the other non-key columns to change
 -  Indexing is a way to optimize the performance of a database by minimizing the number of disk accesses required when a query is processed. It is a data structure technique which is used to quickly locate and access the data in a database. In general, there are two types of file organization mechanism which are followed by the indexing methods to store the data:
 
+
 Database Normal Forms
 - 1NF (First Normal Form) Rules
     Each table cell should contain a single value.
@@ -342,10 +343,27 @@ If no database table instance contains two or more, independent and multivalued 
 A table is in 5th Normal Form only if it is in 4NF and it cannot be decomposed into any number of smaller tables without loss of data.
 - 6NF (Sixth Normal Form)
 ## 20. Transaction isolation levels
+
+ACID Definition
+
+ACID is an acronym that stands for Atomicity, Consistency, Isolation, Durability. These are explained below.
+Atomicity
+
+Atomicity means that you guarantee that either all of the transaction succeeds or none of it does. You don’t get part of it succeeding and part of it not. If one part of the transaction fails, the whole transaction fails. With atomicity, it’s either “all or nothing”.
+Consistency
+
+This ensures that you guarantee that all data will be consistent. All data will be valid according to all defined rules, including any constraints, cascades, and triggers that have been applied on the database.
+Isolation
+
+Guarantees that all transactions will occur in isolation. No transaction will be affected by any other transaction. So a transaction cannot read data from any other transaction that has not yet completed.
+Durability
+
+Durability means that, once a transaction is committed, it will remain in the system – even if there’s a system crash immediately following the transaction. Any changes from the transaction must be stored permanently. If the system tells the user that the transaction has succeeded, the transaction must have, in fact, succeeded.
+
 - READ UNCOMMITTED - no locks, read everything
-    READ COMMITTED - with lock, default to many RDBMS, Suppose T2 reads some of the rows and T1 then change a row and commit the change, now T2 reads the same row set and gets a different result
-    REPEATABLE READ - his isolation level returns the same result set throughout the transaction execution for the same SELECT run any number of times during the progression of a transaction. REPEATABLE READ is MySQL’s default transaction isolation level.
-    SERIALIZABLE - completely isolates the effect of one transaction from others. It is similar to REPEATABLE READ with the additional restriction that row selected by one transaction cannot be changed by another until the first transaction finishes.
+- READ COMMITTED - with lock, default to many RDBMS, Suppose T2 reads some of the rows and T1 then change a row and commit the change, now T2 reads the same row set and gets a different result
+- REPEATABLE READ - his isolation level returns the same result set throughout the transaction execution for the same SELECT run any number of times during the progression of a transaction. REPEATABLE READ is MySQL’s default transaction isolation level.
+- SERIALIZABLE - completely isolates the effect of one transaction from others. It is similar to REPEATABLE READ with the additional restriction that row selected by one transaction cannot be changed by another until the first transaction finishes.
 ## 21. Compare SQL and NoSQL 
 SQL databases are table based databases whereas NoSQL databases can be document based, key-value pairs, graph databases.
 SQL databases are vertically scalable while NoSQL databases are horizontally scalable.
