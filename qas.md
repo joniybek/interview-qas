@@ -1295,3 +1295,23 @@ Here, are cons/drawbacks of using non-clustered index:
 ## 31. Logging in multithreaded env
 There are two options: one is to write separate file for each thread or one for all. Logback MDC deals with it.
 The MDC class contains only static methods. It lets the developer place information in a diagnostic context that can be subsequently retrieved by certain logback components. The MDC manages contextual information on a per thread basis. Typically, while starting to service a new client request, the developer will insert pertinent contextual information, such as the client id, client's IP address, request parameters etc. into the MDC. Logback components, if appropriately configured, will automatically include this information in each log entry. 
+
+## 32. Runnable vs Callable
+Callable (Since ver 9) returns result while Runnable not
+
+## 33. Hibernate: save vs persist
+Save returns Id while persist no
+
+## 34. Hibernate: get() vs load()
+load returns proxy without hitting DB and can throw exception if no data while get hits DB or cache and returns null if not found
+
+## 35. Hibernate: default isolation level
+ReadCommited
+
+## 36. Hibernate: Architectural classes
+SessionFactory(one per database, manages everything, JPA alternative is EntityManagerFactory) -> Session (wraps JDBC connection, lightweight, JPA:EntityManager) -> Transaction( one to one with Session, JPA:EntityTransaction) -> Query(HQL)
+
+## 37. Hibernate vs JPA vs SpringJPA
+Hibernate - ORM implementation, implements JPA as well as Hibernate's own 
+JPA - Specification from Java Comunity
+Spring Jpa - additional layer above Hibernate, Repository implementation, generatation of queries from method names ...
