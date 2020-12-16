@@ -1315,3 +1315,10 @@ SessionFactory(one per database, manages everything, JPA alternative is EntityMa
 Hibernate - ORM implementation, implements JPA as well as Hibernate's own 
 JPA - Specification from Java Comunity
 Spring Jpa - additional layer above Hibernate, Repository implementation, generatation of queries from method names ...
+
+## 38. JavaStreams parallel
+Stream api can user ForkJoinPool for computation
+can use Arrays.parallelSort to do sorting (MergeSort algorithm)
+
+## 39. Monads in Java
+Optional is one example
