@@ -1322,3 +1322,6 @@ can use Arrays.parallelSort to do sorting (MergeSort algorithm)
 
 ## 39. Monads in Java
 Optional is one example
+
+## 40. About microservices testing
+https://martinfowler.com/articles/microservice-testing/#architecture
