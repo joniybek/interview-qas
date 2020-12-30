@@ -1320,8 +1320,17 @@ Spring Jpa - additional layer above Hibernate, Repository implementation, genera
 Stream api can user ForkJoinPool for computation
 can use Arrays.parallelSort to do sorting (MergeSort algorithm)
 
-## 39. Monads in Java
+## 39. Java. Monads in Java
 Optional is one example
 
-## 40. About microservices testing
+## 40. Architecture. About microservices testing
 https://martinfowler.com/articles/microservice-testing/#architecture
+
+## 41. Java. Where does local variables reside
+Stack
+
+## 42. Java. Memory management in JVM
+Local variables (primitives) are stored in stack when block of code executed and then cleared, however objects in block of code references instances on Heap. String pool is also in Heap. Thats why Java is called pass by Value as values (primitives or object references) are passed as is to stack.
+
+# 43. Java. Soft leak
+Object is referenced in stack even though it will not be used.
