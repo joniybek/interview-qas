@@ -1332,5 +1332,8 @@ Stack
 ## 42. Java. Memory management in JVM
 Local variables (primitives) are stored in stack when block of code executed and then cleared, however objects in block of code references instances on Heap. String pool is also in Heap. Thats why Java is called pass by Value as values (primitives or object references) are passed as is to stack.
 
-# 43. Java. Soft leak
+## 43. Java. Soft leak
 Object is referenced in stack even though it will not be used.
+
+## 44. Java. JVM heap size flag
+-Xmx
